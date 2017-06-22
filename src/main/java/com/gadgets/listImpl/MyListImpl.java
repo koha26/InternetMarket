@@ -53,7 +53,7 @@ public class MyListImpl<E> implements List<E> {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if ((o == null && array[i] == null) || array[i].equals(o) || array[i] == null) {
+            if ((o == null && array[i] == null) || (array[i] != null && array[i].equals(o))) {
                 return true;
             }
         }
@@ -98,7 +98,8 @@ public class MyListImpl<E> implements List<E> {
             return false;
         }
         for (int i = 0; i < size; i++) {
-            if ((o == null && array[i] == null) || array[i].equals(o) || array[i] == null) {
+            if ((o == null && array[i] == null)
+                    || (array[i] != null && array[i].equals(o))) {
                 System.arraycopy(array, i + 1, array, i, size - i - 1);
                 size--;
                 return true;
@@ -130,16 +131,18 @@ public class MyListImpl<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+        for (E e :c) {
+            add(++index, e);
+        }
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
         boolean res = false;
-        for (Object o :c) {
-            while (remove(o)){
+        for (int i = 0; i < c.size(); i++) {
+            while (remove(c.toArray()[i])){
                 res = true;
-                break;
             }
         }
         return res;
@@ -151,12 +154,12 @@ public class MyListImpl<E> implements List<E> {
         boolean res = false;
         for (E e: array) {
             for (Object o :c) {
-                if ((o == null && e == null) || e.equals(o)){
+                if ((o == null && e == null) || (e != null && e.equals(o))){
                     flag = true;
                     break;
                 }
             }
-            if (!flag){
+            if (flag){
                 remove(e);
                 flag = false;
                 res = true;
@@ -184,7 +187,7 @@ public class MyListImpl<E> implements List<E> {
 
     @Override
     public E set(int index, E element) {
-        if (isAvailableIndex(index)){
+        if (!isAvailableIndex(index)){
             throw new IndexOutOfBoundsException();
         }
         E tmp = array[index];
@@ -194,7 +197,7 @@ public class MyListImpl<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
-        if (isAvailableIndex(index)){
+        if (!isAvailableIndex(index)){
             throw new IndexOutOfBoundsException();
         }
         array = Arrays.copyOf(array, ++size);
@@ -204,7 +207,7 @@ public class MyListImpl<E> implements List<E> {
 
     @Override
     public E remove(int index) {
-        if (isAvailableIndex(index)){
+        if (!isAvailableIndex(index)){
             throw new IndexOutOfBoundsException();
         }
         E tmp = array[index];
@@ -216,7 +219,7 @@ public class MyListImpl<E> implements List<E> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
-            if ((o == null && array[i] == null) || array[i].equals(o) || array[i] == null){
+            if ((o == null && array[i] == null) || (array[i] != null && array[i].equals(o))){
                 return i;
             }
         }
@@ -226,7 +229,7 @@ public class MyListImpl<E> implements List<E> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = size - 1; i >= 0; i--) {
-            if ((o == null && array[i] == null) || array[i].equals(o) || array[i] == null){
+            if ((o == null && array[i] == null) || (array[i] != null && array[i].equals(o))){
                 return i;
             }
         }
