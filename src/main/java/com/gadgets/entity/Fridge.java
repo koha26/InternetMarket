@@ -41,7 +41,7 @@ public class Fridge extends Appliance{
         this.color = color;
     }
 
-    public Fridge(int id, String name, String price, String producer, String category, String type, double height,
+    public Fridge(int id, String name, double price, String producer, String category, String type, double height,
                   double width, double depth, double volume, boolean isFrizerAvailable, double volumeFrizer,
                   String instalationMethod, String color) {
         super(id, name, price, producer, category);
@@ -126,5 +126,46 @@ public class Fridge extends Appliance{
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Fridge fridge = (Fridge) o;
+
+        if (Double.compare(fridge.height, height) != 0) return false;
+        if (Double.compare(fridge.width, width) != 0) return false;
+        if (Double.compare(fridge.depth, depth) != 0) return false;
+        if (Double.compare(fridge.volume, volume) != 0) return false;
+        if (isFrizerAvailable != fridge.isFrizerAvailable) return false;
+        if (Double.compare(fridge.volumeFrizer, volumeFrizer) != 0) return false;
+        if (type != null ? !type.equals(fridge.type) : fridge.type != null) return false;
+        if (instalationMethod != null ? !instalationMethod.equals(fridge.instalationMethod) : fridge.instalationMethod != null)
+            return false;
+        return color != null ? color.equals(fridge.color) : fridge.color == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        long temp;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        temp = Double.doubleToLongBits(height);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(width);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(depth);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(volume);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (isFrizerAvailable ? 1 : 0);
+        temp = Double.doubleToLongBits(volumeFrizer);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (instalationMethod != null ? instalationMethod.hashCode() : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
+        return result;
     }
 }

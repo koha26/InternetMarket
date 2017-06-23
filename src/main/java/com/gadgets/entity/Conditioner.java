@@ -1,5 +1,7 @@
 package com.gadgets.entity;
 
+import java.util.Arrays;
+
 public class Conditioner extends Appliance {
     private String type;
     private double conditionSquare;
@@ -32,7 +34,7 @@ public class Conditioner extends Appliance {
         this.color = color;
     }
 
-    public Conditioner(int id, String name, String price, String producer, String category, String type,
+    public Conditioner(int id, String name, double price, String producer, String category, String type,
                        double conditionSquare, String[] modes, String instalationTypeInnerUnit, String typeInventor,
                        String color) {
         super(id, name, price, producer, category);
@@ -90,5 +92,37 @@ public class Conditioner extends Appliance {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Conditioner that = (Conditioner) o;
+
+        if (Double.compare(that.conditionSquare, conditionSquare) != 0) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(modes, that.modes)) return false;
+        if (instalationTypeInnerUnit != null ? !instalationTypeInnerUnit.equals(that.instalationTypeInnerUnit) : that.instalationTypeInnerUnit != null)
+            return false;
+        if (typeInventor != null ? !typeInventor.equals(that.typeInventor) : that.typeInventor != null) return false;
+        return color != null ? color.equals(that.color) : that.color == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        long temp;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        temp = Double.doubleToLongBits(conditionSquare);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + Arrays.hashCode(modes);
+        result = 31 * result + (instalationTypeInnerUnit != null ? instalationTypeInnerUnit.hashCode() : 0);
+        result = 31 * result + (typeInventor != null ? typeInventor.hashCode() : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
+        return result;
     }
 }
